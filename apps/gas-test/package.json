@@ -1,0 +1,18 @@
+{
+  "name": "gas-test",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "push": "vite build && clasp push"
+  },
+  "dependencies": {
+    "gas-vite-plugin": "workspace:*"
+  },
+  "devDependencies": {
+    "@google/clasp": "^2.4.2",
+    "@types/google-apps-script": "^1.0.83",
+    "vite": "^8.0.0"
+  }
+}

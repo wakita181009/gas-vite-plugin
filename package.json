@@ -1,0 +1,17 @@
+{
+  "name": "gas-vite-plugin-monorepo",
+  "private": true,
+  "scripts": {
+    "build": "pnpm -r build",
+    "check": "biome check ."
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.4.6"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@biomejs/biome"
+    ]
+  },
+  "packageManager": "pnpm@10.32.1"
+}

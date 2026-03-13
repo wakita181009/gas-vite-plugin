@@ -1,0 +1,37 @@
+{
+  "name": "gas-vite-plugin",
+  "version": "0.1.0",
+  "description": "A minimal Vite plugin for Google Apps Script projects",
+  "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "vite build",
+    "prepublishOnly": "vite build"
+  },
+  "keywords": [
+    "vite",
+    "vite-plugin",
+    "google-apps-script",
+    "gas",
+    "clasp"
+  ],
+  "license": "MIT",
+  "peerDependencies": {
+    "vite": ">=5.0.0"
+  },
+  "devDependencies": {
+    "vite": "^8.0.0"
+  }
+}
