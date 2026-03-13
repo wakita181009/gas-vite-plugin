@@ -10,7 +10,7 @@
     "gas-vite-plugin": "workspace:*"
   },
   "devDependencies": {
-    "@types/google-apps-script": "^1.0.83",
+    "@types/google-apps-script": "^2.0.8",
     "vite": "^8.0.0"
   }
 }
