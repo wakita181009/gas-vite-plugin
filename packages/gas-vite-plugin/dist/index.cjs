@@ -28,7 +28,7 @@ function gasPlugin(options = {}) {
 					...config.build?.rollupOptions,
 					output: {
 						...config.build?.rollupOptions?.output,
-						inlineDynamicImports: !config.build?.lib && !Array.isArray(config.build?.rollupOptions?.input)
+						inlineDynamicImports: !(config.build?.lib || Array.isArray(config.build?.rollupOptions?.input))
 					}
 				}
 			} };
@@ -43,7 +43,7 @@ function gasPlugin(options = {}) {
 				if (autoGlobals) code = exposeExportedFunctions(code);
 				code = removeExports(code);
 				if (globals.length > 0) code = exposeGlobals(code, globals);
-				chunk.code = code.trimEnd() + "\n";
+				chunk.code = `${code.trimEnd()}\n`;
 			}
 		},
 		closeBundle() {
@@ -73,22 +73,14 @@ function gasPlugin(options = {}) {
 * and hoist them if they were exported.
 */
 function exposeExportedFunctions(code) {
-	const exportedNames = /* @__PURE__ */ new Set();
-	const exportBlockRe = /^export\s*\{([^}]+)\}\s*;?\s*$/gm;
-	let match;
-	while ((match = exportBlockRe.exec(code)) !== null) for (const name of match[1].split(",")) {
-		const trimmed = name.trim().split(/\s+as\s+/)[0].trim();
-		if (trimmed) exportedNames.add(trimmed);
-	}
-	const inlineExportFnRe = /^export\s+(function\s+\w+)/gm;
-	while ((match = inlineExportFnRe.exec(code)) !== null);
-	code = code.replace(/^export\s+(function\s)/gm, "$1");
-	code = code.replace(/^export\s+(const\s)/gm, "$1");
-	code = code.replace(/^export\s+(let\s)/gm, "$1");
-	code = code.replace(/^export\s+(var\s)/gm, "$1");
-	code = code.replace(/^export\s+(class\s)/gm, "$1");
-	code = code.replace(/^export\s+(async\s+function\s)/gm, "$1");
-	return code;
+	let result = code;
+	result = result.replace(/^export\s+(function\s)/gm, "$1");
+	result = result.replace(/^export\s+(const\s)/gm, "$1");
+	result = result.replace(/^export\s+(let\s)/gm, "$1");
+	result = result.replace(/^export\s+(var\s)/gm, "$1");
+	result = result.replace(/^export\s+(class\s)/gm, "$1");
+	result = result.replace(/^export\s+(async\s+function\s)/gm, "$1");
+	return result;
 }
 /**
 * Remove remaining export statements:
@@ -96,9 +88,10 @@ function exposeExportedFunctions(code) {
 * - `export default ...;`
 */
 function removeExports(code) {
-	code = code.replace(/^export\s*\{[^}]*\}\s*;?\s*$/gm, "");
-	code = code.replace(/^export\s+default\s+/gm, "");
-	return code;
+	let result = code;
+	result = result.replace(/^export\s*\{[^}]*\}\s*;?\s*$/gm, "");
+	result = result.replace(/^export\s+default\s+/gm, "");
+	return result;
 }
 /**
 * For explicitly listed globals, ensure they exist as top-level
@@ -112,7 +105,7 @@ function exposeGlobals(code, globals) {
 		if (!new RegExp(`\\b${name}\\b`).test(code)) continue;
 		lines.push(`function ${name}(...args) { return ${name}(...args); }`);
 	}
-	if (lines.length > 0) code = code + "\n" + lines.join("\n") + "\n";
+	if (lines.length > 0) return `${code}\n${lines.join("\n")}\n`;
 	return code;
 }
 //#endregion

@@ -168,7 +168,17 @@ You **MUST** consider the user input before proceeding (if not empty).
 
 Note: This command assumes a complete task breakdown exists in tasks.md. If tasks are incomplete or missing, suggest running `/speckit.tasks` first to regenerate the task list.
 
-10. **Check for extension hooks**: After completion validation, check if `.specify/extensions.yml` exists in the project root.
+10. **Feature Documentation Update**:
+    After all tasks are complete and validated, update the feature documentation using the `feature-doc-maintainer` skill:
+    - Read `.claude/skills/feature-doc-maintainer/SKILL.md` and follow its full instructions
+    - Gather inputs listed in the skill (constitution, current-status, feature-catalog, spec files, implementation files, templates)
+    - Create or update `.specify/features/{entity}/overview.md` for each entity whose behavior or invariants changed
+    - Create or update `.specify/features/{entity}/{usecase}.md` for each implemented or modified use case
+    - Update `.specify/memory/feature-catalog.md` with entity entries, use case rows, and reverse lookup indexes
+    - Update `.specify/memory/current-status.md` if any work is partial, deferred, or leaves known gaps
+    - Run the skill's Completion Check to verify all docs are in sync
+
+11. **Check for extension hooks**: After completion validation, check if `.specify/extensions.yml` exists in the project root.
     - If it exists, read it and look for entries under the `hooks.after_implement` key
     - If the YAML cannot be parsed or is invalid, skip hook checking silently and continue normally
     - Filter to only hooks where `enabled: true`
