@@ -1,4 +1,4 @@
-# gas-vite-plugin
+# GAS Vite Plugin
 
 A minimal Vite plugin for Google Apps Script (GAS) projects.
 
