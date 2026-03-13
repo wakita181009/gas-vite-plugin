@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <base target="_top" />
+    <title>GAS Web App</title>
+  </head>
+  <body>
+    <h1>GAS Web App</h1>
+    <div id="data"></div>
+    <button id="load">Load Data</button>
+    <button id="save">Save Data</button>
+
+    <script>
+      document.getElementById("load").addEventListener("click", () => {
+        google.script.run
+          .withSuccessHandler((data) => {
+            document.getElementById("data").textContent = JSON.stringify(data);
+          })
+          .getData();
+      });
+
+      document.getElementById("save").addEventListener("click", () => {
+        google.script.run
+          .withSuccessHandler(() => {
+            alert("Saved!");
+          })
+          .saveData([["Hello", "World"]]);
+      });
+    </script>
+  </body>
+</html>

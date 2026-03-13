@@ -5,6 +5,16 @@
 **Status**: Draft
 **Input**: Extend gas-vite-plugin with HTML/web app support, explicit globals, and export edge case handling
 
+## Clarifications
+
+### Session 2026-03-13
+
+- Q: `globals` mechanism — should it protect functions from tree-shaking? → A: Yes. Functions listed in `globals` are protected from tree-shaking via `transform` hook injection (`typeof <name>;`), removed in `generateBundle`
+- Q: `autoGlobals: false` behavior — what happens to exported functions? → A: Export removal always runs. `autoGlobals` only controls whether exported functions are automatically added to the `globals` list for tree-shake protection. No scope hiding is applied
+- Q: `include` glob pattern base directory? → A: Resolved relative to Vite's `root` (`config.root`)
+- Q: US5 test app verification scope — automate deployment? → A: Build output structure verification only (file existence, top-level function checks). Deployment is manual
+- Q: IIFE detection/unwrap in v0.2 scope? → A: Deferred to a future version
+
 ## Assumptions & Constraints
 
 - **Inherits all v0.1 constraints**: GAS V8 runtime only, no ES Module support, flat file structure required.
@@ -92,13 +102,13 @@ A standalone test app (`apps/gas-webapp`) that exercises the GAS web app pattern
 1. **Given** a project with `doGet()` returning an HTML page, **When** built, **Then** `doGet` is a top-level function in the output
 2. **Given** HTML files configured via `include: ["src/**/*.html"]`, **When** built, **Then** HTML files are present in the output directory
 3. **Given** server-side functions called from client HTML (e.g., `getData`, `saveData`), **When** built, **Then** all are top-level declarations accessible from the client
-4. **Given** the built output, **When** deployed as a web app, **Then** the HTML page loads and client-server communication works correctly
+4. **Given** the built output, **When** inspected, **Then** the output structure is correct for GAS web app deployment (verified manually)
 
 ---
 
 ### Edge Cases
 
-- What happens with IIFE-wrapped output? → Plugin should detect and handle if output is wrapped in a module pattern (GAS needs bare top-level functions)
+- What happens with IIFE-wrapped output? → Deferred to future version. Vite library mode ES output does not produce IIFE wrapping; only affects users explicitly choosing `formats: ['iife']`
 - What happens when `include` patterns overlap (same file matched twice)? → File is copied only once, no error
 - What happens when `include` matches files outside the project root? → Ignored for security; warn the developer
 - What happens when `include` matches files in subdirectories (e.g., `src/views/index.html`)? → Copied flat to output directory as `index.html` (GAS requires flat file structure; `HtmlService.createHtmlOutputFromFile("index")` looks by name only)
@@ -110,9 +120,9 @@ A standalone test app (`apps/gas-webapp`) that exercises the GAS web app pattern
 
 ### Functional Requirements
 
-- **FR-001**: Plugin MUST support an `include` option accepting glob patterns (via `tinyglobby`) to copy additional files flat (no subdirectory structure) to the output directory, since GAS projects require a flat file structure
-- **FR-002**: Plugin MUST support a `globals` option for explicitly listing function names to expose as top-level declarations
-- **FR-003**: Plugin MUST support an `autoGlobals` option (default: `true`) to toggle automatic export detection. Export removal always runs regardless of this setting; `autoGlobals` only controls whether exported functions are automatically added to the globals list
+- **FR-001**: Plugin MUST support an `include` option accepting glob patterns (via `tinyglobby`) to copy additional files flat (no subdirectory structure) to the output directory, since GAS projects require a flat file structure. Patterns are resolved relative to Vite's `root` (`config.root`)
+- **FR-002**: Plugin MUST support a `globals` option for explicitly listing function names to expose as top-level declarations. Functions listed in `globals` MUST be protected from tree-shaking via `transform` hook injection (`typeof <name>;`), removed in `generateBundle`
+- **FR-003**: Plugin MUST support an `autoGlobals` option (default: `true`) to toggle automatic export detection. Export removal always runs regardless of this setting; `autoGlobals` only controls whether exported functions are automatically added to the globals list for tree-shake protection. No scope hiding is applied when `autoGlobals: false`
 - **FR-004**: Plugin MUST correctly handle `export default function` declarations
 - **FR-005**: Plugin MUST correctly handle `export { name, ... }` aggregation blocks
 - **FR-006**: Plugin MUST correctly handle `export { name as alias }` renamed exports
@@ -124,7 +134,7 @@ A standalone test app (`apps/gas-webapp`) that exercises the GAS web app pattern
 ### Key Entities
 
 - **Plugin Configuration** (extended): Adds `include`, `globals`, and `autoGlobals` fields to the v0.1 configuration
-- **GAS Triggers**: The set of well-known function names that GAS calls automatically (`onOpen`, `onEdit`, `onInstall`, `onSelectionChange`, `onFormSubmit`, `doGet`, `doPost`). Used by the `globals` feature to always include these names.
+- **GAS Triggers**: The set of well-known function names that GAS calls automatically (`onOpen`, `onEdit`, `onInstall`, `onSelectionChange`, `onFormSubmit`, `doGet`, `doPost`). These are NOT auto-included in `globals`; users must explicitly export or list them in `globals` if needed.
 - **Include Pattern**: A glob pattern string (resolved by `tinyglobby`) that matches files to copy flat to the output directory
 
 ## Success Criteria *(mandatory)*
@@ -134,6 +144,6 @@ A standalone test app (`apps/gas-webapp`) that exercises the GAS web app pattern
 - **SC-001**: HTML files specified via `include` are present in the output directory after build
 - **SC-002**: All functions listed in `globals` are callable as top-level declarations in the output
 - **SC-003**: All 5 export patterns (default function, aggregation, renamed, class, default expression) produce correct output
-- **SC-004**: Test app (`apps/gas-webapp`) builds, deploys, and functions correctly as a web app
+- **SC-004**: Test app (`apps/gas-webapp`) builds and produces correct output structure (file existence, top-level function verification). Actual GAS deployment is verified manually
 - **SC-005**: v0.1 projects continue to work without configuration changes (backward compatibility)
 - **SC-006**: New features have 100% unit test coverage

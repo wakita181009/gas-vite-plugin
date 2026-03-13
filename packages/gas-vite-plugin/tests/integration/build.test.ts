@@ -1,52 +1,13 @@
-import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { build } from "vite";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import gasPlugin from "../../src/index.js";
+import { createTestContext } from "./helpers.js";
 
 const FIXTURES_DIR = resolve(import.meta.dirname, "../fixtures");
+const { createFixture, readOutput, buildFixture, cleanup } = createTestContext(FIXTURES_DIR);
 
-function createFixture(name: string, files: Record<string, string>): string {
-  const dir = resolve(FIXTURES_DIR, name);
-  rmSync(dir, { recursive: true, force: true });
-  mkdirSync(dir, { recursive: true });
-  mkdirSync(resolve(dir, "src"), { recursive: true });
-
-  for (const [path, content] of Object.entries(files)) {
-    const fullPath = resolve(dir, path);
-    mkdirSync(resolve(fullPath, ".."), { recursive: true });
-    writeFileSync(fullPath, content);
-  }
-
-  return dir;
-}
-
-function readOutput(fixtureDir: string, fileName = "Code.js"): string {
-  return readFileSync(resolve(fixtureDir, "dist", fileName), "utf-8");
-}
-
-async function buildFixture(fixtureDir: string, pluginOptions = {}) {
-  await build({
-    root: fixtureDir,
-    logLevel: "silent",
-    plugins: [gasPlugin(pluginOptions)],
-    build: {
-      lib: {
-        entry: resolve(fixtureDir, "src/main.ts"),
-        formats: ["es"],
-        fileName: () => "Code.js",
-      },
-    },
-  });
-}
-
-beforeEach(() => {
-  rmSync(FIXTURES_DIR, { recursive: true, force: true });
-});
-
-afterEach(() => {
-  rmSync(FIXTURES_DIR, { recursive: true, force: true });
-});
+beforeEach(cleanup);
+afterEach(cleanup);
 
 // --- US1: Basic GAS project build ---
 

@@ -10,6 +10,7 @@
 | Spec | Section |
 |------|---------|
 | `.specify/specs/001-gas-vite-plugin-v01/spec.md` | User Story 2, FR-004, FR-013 |
+| `.specify/specs/002-gas-vite-plugin-v02/spec.md` | FR-010 (include must not affect manifest copy) |
 
 ## Business Rules
 
@@ -17,6 +18,7 @@
 2. The source path defaults to `"src/appsscript.json"` and is configurable via `GasPluginOptions.manifest`.
 3. The path is resolved relative to the Vite root directory (not `process.cwd()`).
 4. If the source file does not exist, emit a `console.warn` with `[gas-vite-plugin]` prefix. Do NOT fail the build.
+5. Manifest copy runs in the `closeBundle` hook before `include` file copying, and is independent of the `include` option.
 
 ## Inputs and Outputs
 
@@ -49,7 +51,7 @@
 
 | Method | Path/Interface | Description |
 |--------|---------------|-------------|
-| `closeBundle()` | Vite plugin hook in `index.ts` | Copies manifest after bundle is written |
+| `closeBundle()` | Vite plugin hook in `index.ts` | Copies manifest after bundle is written, then copies include files |
 
 ## Persistence Touchpoints
 
@@ -60,6 +62,7 @@
 ## Related Features
 
 - `.specify/features/gas-vite-plugin/overview.md`
+- `.specify/features/gas-vite-plugin/include-copy.md` (runs in same `closeBundle` hook, after manifest)
 
 ## Related Tests
 
@@ -68,6 +71,7 @@
 | Copies manifest from default location | `packages/gas-vite-plugin/tests/integration/build.test.ts` (US2) |
 | Copies manifest from custom path | `packages/gas-vite-plugin/tests/integration/build.test.ts` (US2) |
 | Warns when manifest is missing | `packages/gas-vite-plugin/tests/integration/build.test.ts` (US2) |
+| Backward compatible: no include = only appsscript.json copied | `packages/gas-vite-plugin/tests/integration/include.test.ts` |
 
 ## Change Impact
 

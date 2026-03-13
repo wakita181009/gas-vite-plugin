@@ -9,8 +9,8 @@ export default defineConfig({
       formats: ["es", "cjs"],
       fileName: "index",
     },
-    rollupOptions: {
-      external: ["vite", "node:fs", "node:path", "node:fs/promises"],
+    rolldownOptions: {
+      external: ["vite", "node:fs", "node:path", "node:fs/promises", "tinyglobby"],
       output: {
         exports: "named",
       },

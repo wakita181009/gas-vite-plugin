@@ -1,0 +1,14 @@
+hooks:
+  after_implement:
+    - extension: quality-check
+      command: quality-check
+      description: Run linting and tests after implementation
+      prompt: "Run pnpm check && pnpm test to validate implementation quality"
+      enabled: true
+      optional: false
+    - extension: feature-doc-maintainer
+      command: feature-doc-maintainer
+      description: Update feature documentation after implementation
+      prompt: "Read .claude/skills/feature-doc-maintainer/SKILL.md and follow its full instructions to update feature docs, feature-catalog.md, and current-status.md"
+      enabled: true
+      optional: false

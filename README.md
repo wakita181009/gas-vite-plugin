@@ -1,4 +1,4 @@
-# gas-vite-plugin monorepo
+# GAS Vite Plugin monorepo
 
 Monorepo for [gas-vite-plugin](./packages/gas-vite-plugin/) — a minimal Vite plugin for Google Apps Script projects.
 

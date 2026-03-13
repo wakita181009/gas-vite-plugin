@@ -8,17 +8,19 @@ Write standard TypeScript with `export function` — the plugin handles the rest
 
 - Strips `export` keywords — top-level functions become callable by GAS
 - Copies `appsscript.json` to dist automatically
+- `include` option — copy HTML/CSS/images flat to dist for web apps
+- `globals` option — protect non-exported functions from tree-shaking
+- `autoGlobals` toggle — fine-grained control over tree-shake protection
 - Sets GAS-safe build defaults (no minification, no code splitting)
-- Zero runtime footprint — no code injected into your GAS output
 - V8 runtime assumed — no unnecessary legacy transforms
-- No AST parser dependency — uses Rollup's `generateBundle` hook
+- No AST parser dependency — regex-based transforms
 
 ## What this plugin does NOT do (by design)
 
 - Arrow function → function declaration conversion (V8 handles this)
 - `console.log` → `Logger.log` conversion
 - Path alias detection (Vite's job)
-- TypeScript compilation (Vite's job via esbuild)
+- TypeScript compilation (Vite's job via oxc/esbuild)
 
 ## Install
 
@@ -69,13 +71,60 @@ npx clasp push
 ```typescript
 gasPlugin({
   manifest: "src/appsscript.json", // Path to manifest (default)
+  include: ["src/**/*.html"],       // Copy additional files flat to dist
+  globals: ["processData"],         // Protect functions from tree-shaking
+  autoGlobals: true,                // Auto-protect exported functions (default)
+});
+```
+
+### `include`
+
+Copy additional files (HTML, CSS, images) flat to the output directory. Essential for GAS web apps using `HtmlService.createHtmlOutputFromFile()`.
+
+```typescript
+gasPlugin({
+  include: ["src/**/*.html", "src/**/*.css"],
+});
+```
+
+Files are flattened — `src/views/index.html` becomes `dist/index.html`. Duplicate basenames trigger a warning.
+
+### `globals`
+
+Protect non-exported functions from tree-shaking. Use for functions called by GAS via string name (menu handlers, trigger targets).
+
+```typescript
+// vite.config.ts
+gasPlugin({ globals: ["processData"] });
+
+// src/main.ts
+export function onOpen() {
+  SpreadsheetApp.getUi()
+    .createMenu("Tools")
+    .addItem("Run", "processData")  // GAS calls by string name
+    .addToUi();
+}
+
+function processData() {  // Not exported, but protected by globals
+  Logger.log("Processing...");
+}
+```
+
+### `autoGlobals`
+
+When `true` (default), exported functions are automatically protected from tree-shaking. Set to `false` for explicit control — only functions in `globals` are protected.
+
+```typescript
+gasPlugin({
+  autoGlobals: false,
+  globals: ["onOpen", "doGet"],
 });
 ```
 
 ## Requirements
 
 - Vite 5+
-- Node.js 18+
+- Node.js 20+
 
 ## License
 

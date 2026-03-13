@@ -5,7 +5,7 @@ export default defineConfig({
     include: ["tests/**/*.test.ts"],
     coverage: {
       provider: "v8",
-      include: ["src/transforms.ts"],
+      include: ["src/transforms.ts", "src/include.ts"],
       thresholds: {
         statements: 100,
         branches: 100,
