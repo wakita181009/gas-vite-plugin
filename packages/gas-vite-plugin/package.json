@@ -1,6 +1,6 @@
 {
   "name": "gas-vite-plugin",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A minimal Vite plugin for Google Apps Script projects",
   "type": "module",
   "main": "dist/index.cjs",
@@ -14,7 +14,8 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "README.md"
   ],
   "scripts": {
     "build": "vite build",

@@ -1,6 +1,38 @@
-# GAS Vite Plugin monorepo
+# GAS Vite Plugin
 
-Monorepo for [gas-vite-plugin](./packages/gas-vite-plugin/) — a minimal Vite plugin for Google Apps Script projects.
+A minimal Vite plugin for Google Apps Script projects.
+
+Write standard TypeScript with `export function` — the plugin strips exports, copies manifests, and protects functions from tree-shaking so your code runs on GAS as-is.
+
+## Quick Start
+
+```bash
+npm install -D gas-vite-plugin vite
+```
+
+```typescript
+// vite.config.ts
+import gasPlugin from "gas-vite-plugin";
+import { defineConfig } from "vite";
+
+export default defineConfig({
+  plugins: [gasPlugin()],
+  build: {
+    lib: {
+      entry: "src/main.ts",
+      formats: ["es"],
+      fileName: () => "Code.js",
+    },
+  },
+});
+```
+
+```bash
+npx vite build
+npx clasp push
+```
+
+See [`packages/gas-vite-plugin/README.md`](./packages/gas-vite-plugin/README.md) for full documentation and options.
 
 ## Packages
 
@@ -8,22 +40,21 @@ Monorepo for [gas-vite-plugin](./packages/gas-vite-plugin/) — a minimal Vite p
 |---------|-------------|
 | [`gas-vite-plugin`](./packages/gas-vite-plugin/) | The Vite plugin (published to npm) |
 
+## Example Apps
+
+| App | Description |
+|-----|-------------|
+| [`gas-script`](./apps/gas-script/) | Basic GAS project (triggers, menus) |
+| [`gas-webapp`](./apps/gas-webapp/) | GAS web app (doGet + HTML + google.script.run) |
+
 ## Development
 
 ```bash
 pnpm install          # Install dependencies
 pnpm build            # Build all packages
 pnpm test             # Run tests
-pnpm check            # Lint & format with Biome
+pnpm -w run check     # Lint & format with Biome
 ```
-
-## Tech Stack
-
-- **Package manager**: pnpm (workspace)
-- **Language**: TypeScript 5.x (ES2022, strict)
-- **Build**: Vite library mode (ES + CJS dual output)
-- **Test**: Vitest with V8 coverage
-- **Lint/Format**: Biome
 
 ## License
 

@@ -121,6 +121,67 @@ gasPlugin({
 });
 ```
 
+## Web App Example
+
+```typescript
+// vite.config.ts
+import gasPlugin from "gas-vite-plugin";
+import { defineConfig } from "vite";
+
+export default defineConfig({
+  plugins: [
+    gasPlugin({
+      include: ["src/**/*.html"],
+      globals: ["getData", "saveData"],
+    }),
+  ],
+  build: {
+    lib: {
+      entry: "src/main.ts",
+      formats: ["es"],
+      fileName: () => "Code.js",
+    },
+  },
+});
+```
+
+```typescript
+// src/main.ts
+export function doGet() {
+  return HtmlService.createHtmlOutputFromFile("index").setTitle("My App");
+}
+
+// Called by client via google.script.run — protected by globals config
+function getData() {
+  return SpreadsheetApp.getActiveSpreadsheet().getActiveSheet().getDataRange().getValues();
+}
+```
+
+```html
+<!-- src/index.html (copied flat to dist via include) -->
+<!DOCTYPE html>
+<html>
+  <body>
+    <div id="app"></div>
+    <script>
+      google.script.run.withSuccessHandler(console.log).getData();
+    </script>
+  </body>
+</html>
+```
+
+## Project Structure
+
+```
+your-gas-project/
+├── src/
+│   ├── main.ts            # Entry point
+│   ├── appsscript.json    # GAS manifest (auto-copied)
+│   └── index.html         # Optional: for web apps
+├── vite.config.ts
+└── package.json
+```
+
 ## Requirements
 
 - Vite 5+
