@@ -27,7 +27,7 @@ export default function gasPlugin(options: GasPluginOptions = {}): Plugin {
     config(config): UserConfig {
       return {
         build: {
-          minify: false,
+          minify: config.build?.minify ?? false,
           rolldownOptions: {
             ...config.build?.rolldownOptions,
             output: {

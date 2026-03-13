@@ -47,6 +47,7 @@ describe("US5: GAS web app test app", () => {
     // getData and saveData survive tree-shaking (via globals)
     expect(output).toMatch(/function getData\(/);
     expect(output).toMatch(/function saveData\(/);
+    expect(output).toMatch(/if \(data\.length === 0 \|\| data\[0\]\?\.length === 0\)/);
 
     // HTML content preserved
     const html = readFileSync(resolve(distDir, "index.html"), "utf-8");

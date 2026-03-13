@@ -36,12 +36,20 @@ export function stripExportKeywords(code: string): string {
  */
 export function removeExportBlocks(code: string): string {
   let result = code;
+  const defaultExportBinding = "__gas_default__";
 
   // Remove `export { ... };`
   result = result.replace(/^export\s*\{[^}]*\}\s*;?\s*$/gm, "");
 
-  // Remove `export default expression;`
-  result = result.replace(/^export\s+default\s+/gm, "");
+  // Preserve named declarations as top-level function/class declarations.
+  result = result.replace(
+    /^export\s+default\s+((?:async\s+)?function(?:\s*\*)?\s+[A-Za-z_$][\w$]*)/gm,
+    "$1",
+  );
+  result = result.replace(/^export\s+default\s+(class\s+[A-Za-z_$][\w$]*)/gm, "$1");
+
+  // Convert remaining default exports into a valid assignment.
+  result = result.replace(/^export\s+default\s+/gm, `const ${defaultExportBinding} = `);
 
   return result;
 }

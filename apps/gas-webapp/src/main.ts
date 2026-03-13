@@ -16,6 +16,10 @@ function getData() {
 
 // biome-ignore lint/correctness/noUnusedVariables: Called by GAS via google.script.run (protected by globals config)
 function saveData(data: string[][]) {
+  if (data.length === 0 || data[0]?.length === 0) {
+    return;
+  }
+
   const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
   sheet.getRange(1, 1, data.length, data[0].length).setValues(data);
 }

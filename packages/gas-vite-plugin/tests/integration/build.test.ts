@@ -1,6 +1,8 @@
 import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
+import type { ConfigEnv } from "vite";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import gasPlugin from "../../src/index.js";
 import { createTestContext } from "./helpers.js";
 
 const FIXTURES_DIR = resolve(import.meta.dirname, "../fixtures");
@@ -134,5 +136,23 @@ describe("US3: Zero-config build defaults", () => {
     // Should contain both functions in one file
     expect(distFiles).toMatch(/function onOpen/);
     expect(distFiles).toMatch(/function helper/);
+  });
+
+  it("respects explicit minify: true from user config", () => {
+    const plugin = gasPlugin();
+    const configFn = typeof plugin.config === "function" ? plugin.config : undefined;
+    // @ts-expect-error -- test stub: ConfigPluginContext `this` is unused
+    const configResult = configFn?.({ build: { minify: true } }, {
+      command: "build",
+      mode: "test",
+      isSsrBuild: false,
+      isPreview: false,
+    } satisfies ConfigEnv);
+
+    expect(configResult).toMatchObject({
+      build: {
+        minify: true,
+      },
+    });
   });
 });

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { removeExportBlocks, stripExportKeywords } from "../src/transforms.js";
+import { removeExportBlocks, stripExportKeywords } from "../src";
 
 describe("stripExportKeywords", () => {
   it("strips export from function declarations", () => {
@@ -110,7 +110,19 @@ describe("removeExportBlocks", () => {
   it("removes export default from expression", () => {
     const input = "export default 42;";
     const result = removeExportBlocks(input);
-    expect(result).toBe("42;");
+    expect(result).toBe("const __gas_default__ = 42;");
+  });
+
+  it("converts anonymous default function export to a valid assignment", () => {
+    const input = "export default function () {}";
+    const result = removeExportBlocks(input);
+    expect(result).toBe("const __gas_default__ = function () {}");
+  });
+
+  it("converts default object literal export to a valid assignment", () => {
+    const input = "export default { value: 1 };";
+    const result = removeExportBlocks(input);
+    expect(result).toBe("const __gas_default__ = { value: 1 };");
   });
 
   it("removes multiple export blocks", () => {
