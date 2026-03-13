@@ -9,10 +9,5 @@ export default defineConfig({
       formats: ["es"],
       fileName: () => "Code.js",
     },
-    rollupOptions: {
-      output: {
-        dir: "dist",
-      },
-    },
   },
 });

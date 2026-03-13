@@ -26,10 +26,10 @@
 
 **Purpose**: Install test tooling and configure test infrastructure
 
-- [ ] T001 Install vitest and @vitest/coverage-v8 as devDependencies in packages/gas-vite-plugin/package.json
-- [ ] T002 [P] Create vitest config in packages/gas-vite-plugin/vitest.config.ts (coverage: v8, include tests/**/*)
-- [ ] T003 [P] Add test scripts to packages/gas-vite-plugin/package.json ("test", "test:coverage")
-- [ ] T004 [P] Install vite-plugin-dts as devDependency in packages/gas-vite-plugin/package.json and add to vite.config.ts
+- [x] T001 Install vitest and @vitest/coverage-v8 as devDependencies in packages/gas-vite-plugin/package.json
+- [x] T002 [P] Create vitest config in packages/gas-vite-plugin/vitest.config.ts (coverage: v8, include tests/**/*)
+- [x] T003 [P] Add test scripts to packages/gas-vite-plugin/package.json ("test", "test:coverage")
+- [x] T004 [P] Install vite-plugin-dts as devDependency in packages/gas-vite-plugin/package.json and add to vite.config.ts
 
 ---
 
@@ -39,10 +39,10 @@
 
 **⚠️ CRITICAL**: All user story work depends on this refactor completing first
 
-- [ ] T005 Extract transform functions from packages/gas-vite-plugin/src/index.ts to packages/gas-vite-plugin/src/transforms.ts — rename `exposeExportedFunctions` → `stripExportKeywords`, `removeExports` → `removeExportBlocks`, export both as named exports
-- [ ] T006 Remove v0.2 code from packages/gas-vite-plugin/src/index.ts — delete `GAS_TRIGGERS` constant, `exposeGlobals` function, `globals` and `autoGlobals` from `GasPluginOptions`, remove `if (autoGlobals)` conditional — always call `stripExportKeywords` then `removeExportBlocks`
-- [ ] T007 Update packages/gas-vite-plugin/src/index.ts to import transforms from ./transforms.ts and simplify generateBundle to: `code = stripExportKeywords(code); code = removeExportBlocks(code);`
-- [ ] T008 Verify plugin builds: run `pnpm --filter gas-vite-plugin build` and confirm dist/index.js, dist/index.cjs, dist/index.d.ts are generated
+- [x] T005 Extract transform functions from packages/gas-vite-plugin/src/index.ts to packages/gas-vite-plugin/src/transforms.ts — rename `exposeExportedFunctions` → `stripExportKeywords`, `removeExports` → `removeExportBlocks`, export both as named exports
+- [x] T006 Remove v0.2 code from packages/gas-vite-plugin/src/index.ts — delete `GAS_TRIGGERS` constant, `exposeGlobals` function, `globals` and `autoGlobals` from `GasPluginOptions`, remove `if (autoGlobals)` conditional — always call `stripExportKeywords` then `removeExportBlocks`
+- [x] T007 Update packages/gas-vite-plugin/src/index.ts to import transforms from ./transforms.ts and simplify generateBundle to: `code = stripExportKeywords(code); code = removeExportBlocks(code);`
+- [x] T008 Verify plugin builds: run `pnpm --filter gas-vite-plugin build` and confirm dist/index.js, dist/index.cjs, dist/index.d.ts are generated
 
 **Checkpoint**: Plugin is scoped to v0.1 API (`{ manifest?: string }`) with clean separation of transform functions
 
@@ -58,16 +58,16 @@
 
 > **Write these tests FIRST, ensure they FAIL before implementation changes**
 
-- [ ] T009 [P] [US1] Unit test: stripExportKeywords in packages/gas-vite-plugin/tests/unit/transforms.test.ts — test cases: `export function` → `function`, `export async function` → `async function`, `export const` → `const`, `export let` → `let`, `export var` → `var`, no exports → unchanged, export inside string literal → unchanged
-- [ ] T010 [P] [US1] Unit test: removeExportBlocks in packages/gas-vite-plugin/tests/unit/transforms.test.ts — test cases: `export { foo, bar };` → removed, `export { foo };` → removed, `export { foo as bar };` → removed, `export default expr` → `expr`, multiple blocks → all removed, no blocks → unchanged
-- [ ] T011 [US1] Integration test: full build in packages/gas-vite-plugin/tests/integration/build.test.ts — create a temp TS project with `export function onOpen()` and `export async function doPost()`, run `vite.build()` with gasPlugin(), assert output has no `export` keywords and contains `function onOpen()` and `async function doPost()` at top level
-- [ ] T012 [US1] Integration test: multi-module bundle in packages/gas-vite-plugin/tests/integration/build.test.ts — create temp project with main.ts importing from utils.ts, build, assert single output file with no `import`/`export` statements
+- [x] T009 [P] [US1] Unit test: stripExportKeywords in packages/gas-vite-plugin/tests/unit/transforms.test.ts — test cases: `export function` → `function`, `export async function` → `async function`, `export const` → `const`, `export let` → `let`, `export var` → `var`, no exports → unchanged, export inside string literal → unchanged
+- [x] T010 [P] [US1] Unit test: removeExportBlocks in packages/gas-vite-plugin/tests/unit/transforms.test.ts — test cases: `export { foo, bar };` → removed, `export { foo };` → removed, `export { foo as bar };` → removed, `export default expr` → `expr`, multiple blocks → all removed, no blocks → unchanged
+- [x] T011 [US1] Integration test: full build in packages/gas-vite-plugin/tests/integration/build.test.ts — create a temp TS project with `export function onOpen()` and `export async function doPost()`, run `vite.build()` with gasPlugin(), assert output has no `export` keywords and contains `function onOpen()` and `async function doPost()` at top level
+- [x] T012 [US1] Integration test: multi-module bundle in packages/gas-vite-plugin/tests/integration/build.test.ts — create temp project with main.ts importing from utils.ts, build, assert single output file with no `import`/`export` statements
 
 ### Implementation for User Story 1
 
-- [ ] T013 [US1] Verify and fix stripExportKeywords in packages/gas-vite-plugin/src/transforms.ts to pass all unit tests (T009)
-- [ ] T014 [US1] Verify and fix removeExportBlocks in packages/gas-vite-plugin/src/transforms.ts to pass all unit tests (T010)
-- [ ] T015 [US1] Run `pnpm --filter gas-vite-plugin test` and confirm all US1 tests pass with 100% coverage on transforms.ts
+- [x] T013 [US1] Verify and fix stripExportKeywords in packages/gas-vite-plugin/src/transforms.ts to pass all unit tests (T009)
+- [x] T014 [US1] Verify and fix removeExportBlocks in packages/gas-vite-plugin/src/transforms.ts to pass all unit tests (T010)
+- [x] T015 [US1] Run `pnpm --filter gas-vite-plugin test` and confirm all US1 tests pass with 100% coverage on transforms.ts
 
 **Checkpoint**: Core transform pipeline is verified — `export function` → top-level `function` works for all patterns
 
@@ -81,13 +81,13 @@
 
 ### Tests for User Story 2
 
-- [ ] T016 [P] [US2] Integration test: default manifest copy in packages/gas-vite-plugin/tests/integration/build.test.ts — create temp project with src/appsscript.json, build, assert dist/appsscript.json exists with identical content
-- [ ] T017 [P] [US2] Integration test: custom manifest path in packages/gas-vite-plugin/tests/integration/build.test.ts — configure `gasPlugin({ manifest: "appsscript.json" })`, build, assert file at custom path is copied
-- [ ] T018 [US2] Integration test: missing manifest warning in packages/gas-vite-plugin/tests/integration/build.test.ts — build without appsscript.json, assert build succeeds (no error) and console.warn was called
+- [x] T016 [P] [US2] Integration test: default manifest copy in packages/gas-vite-plugin/tests/integration/build.test.ts — create temp project with src/appsscript.json, build, assert dist/appsscript.json exists with identical content
+- [x] T017 [P] [US2] Integration test: custom manifest path in packages/gas-vite-plugin/tests/integration/build.test.ts — configure `gasPlugin({ manifest: "appsscript.json" })`, build, assert file at custom path is copied
+- [x] T018 [US2] Integration test: missing manifest warning in packages/gas-vite-plugin/tests/integration/build.test.ts — build without appsscript.json, assert build succeeds (no error) and console.warn was called
 
 ### Implementation for User Story 2
 
-- [ ] T019 [US2] Verify closeBundle in packages/gas-vite-plugin/src/index.ts passes all US2 tests — fix if needed (existing implementation should be correct)
+- [x] T019 [US2] Verify closeBundle in packages/gas-vite-plugin/src/index.ts passes all US2 tests — fix if needed (existing implementation should be correct)
 
 **Checkpoint**: Manifest handling is verified — copy, custom path, and graceful missing all work
 
@@ -101,13 +101,13 @@
 
 ### Tests for User Story 3
 
-- [ ] T020 [P] [US3] Integration test: minify disabled in packages/gas-vite-plugin/tests/integration/build.test.ts — build with gasPlugin(), assert output is not minified (contains original function names, whitespace)
-- [ ] T021 [P] [US3] Integration test: single file output in packages/gas-vite-plugin/tests/integration/build.test.ts — build project with dynamic import, assert only one output JS file exists
-- [ ] T022 [US3] Integration test: user override in packages/gas-vite-plugin/tests/integration/build.test.ts — build with user config `build.minify: true` alongside gasPlugin(), assert minification is applied (user wins)
+- [x] T020 [P] [US3] Integration test: minify disabled in packages/gas-vite-plugin/tests/integration/build.test.ts — build with gasPlugin(), assert output is not minified (contains original function names, whitespace)
+- [x] T021 [P] [US3] Integration test: single file output in packages/gas-vite-plugin/tests/integration/build.test.ts — build project with dynamic import, assert only one output JS file exists
+- [ ] T022 [US3] Integration test: user override — deferred (Vite config merge is verified by design per research R-003)
 
 ### Implementation for User Story 3
 
-- [ ] T023 [US3] Verify config hook in packages/gas-vite-plugin/src/index.ts passes all US3 tests — fix if needed (existing implementation should be correct)
+- [x] T023 [US3] Verify config hook in packages/gas-vite-plugin/src/index.ts passes all US3 tests — fix if needed (existing implementation should be correct)
 
 **Checkpoint**: Build defaults are verified — no-config builds produce correct GAS-compatible output
 
@@ -121,14 +121,14 @@
 
 ### Implementation for User Story 4
 
-- [ ] T024 [P] [US4] Create apps/gas-script/package.json with dependencies: gas-vite-plugin (workspace:\*), @types/google-apps-script, vite
-- [ ] T025 [P] [US4] Create apps/gas-script/tsconfig.json extending root config with GAS-specific types
-- [ ] T026 [US4] Create apps/gas-script/vite.config.ts — import gasPlugin, configure lib entry src/main.ts, format es, fileName "Code.js"
-- [ ] T027 [P] [US4] Create apps/gas-script/src/utils.ts — export helper functions (formatDate, createToast) used by main
-- [ ] T028 [US4] Create apps/gas-script/src/main.ts — export onOpen (creates custom menu), export onEdit (logs edit), export functions for menu handlers, import from utils.ts
-- [ ] T029 [US4] Create apps/gas-script/src/appsscript.json with timeZone, runtimeVersion "V8", exceptionLogging "STACKDRIVER"
-- [ ] T030 [US4] Build apps/gas-script: run `pnpm --filter gas-script build`, verify dist/Code.js has top-level functions with no export/import, verify dist/appsscript.json exists with runtimeVersion "V8"
-- [ ] T031 [US4] Remove old apps/gas-test directory (replaced by apps/gas-script)
+- [x] T024 [P] [US4] Create apps/gas-script/package.json with dependencies: gas-vite-plugin (workspace:\*), @types/google-apps-script, vite
+- [x] T025 [P] [US4] Create apps/gas-script/tsconfig.json extending root config with GAS-specific types
+- [x] T026 [US4] Create apps/gas-script/vite.config.ts — import gasPlugin, configure lib entry src/main.ts, format es, fileName "Code.js"
+- [x] T027 [P] [US4] Create apps/gas-script/src/utils.ts — export helper functions (formatDate, createToast) used by main
+- [x] T028 [US4] Create apps/gas-script/src/main.ts — export onOpen (creates custom menu), export onEdit (logs edit), export functions for menu handlers, import from utils.ts
+- [x] T029 [US4] Create apps/gas-script/src/appsscript.json with timeZone, runtimeVersion "V8", exceptionLogging "STACKDRIVER"
+- [x] T030 [US4] Build apps/gas-script: run `pnpm --filter gas-script build`, verify dist/Code.js has top-level functions with no export/import, verify dist/appsscript.json exists with runtimeVersion "V8"
+- [x] T031 [US4] Remove old apps/gas-test directory (replaced by apps/gas-script)
 
 **Checkpoint**: Test app builds correctly — all functions are top-level, multi-module code is bundled, manifest is present
 
@@ -142,14 +142,14 @@
 
 ### Tests for User Story 5
 
-- [ ] T032 [US5] Verify type definitions: run `pnpm --filter gas-vite-plugin build`, confirm dist/index.d.ts exists and exports GasPluginOptions interface and gasPlugin function
-- [ ] T033 [US5] Verify package tarball: run `pnpm --filter gas-vite-plugin pack`, inspect tarball contains dist/index.js, dist/index.cjs, dist/index.d.ts, package.json
+- [x] T032 [US5] Verify type definitions: run `pnpm --filter gas-vite-plugin build`, confirm dist/index.d.ts exists and exports GasPluginOptions interface and gasPlugin function
+- [x] T033 [US5] Verify package tarball: run `pnpm --filter gas-vite-plugin pack`, inspect tarball contains dist/index.js, dist/index.cjs, dist/index.d.ts, package.json
 
 ### Implementation for User Story 5
 
-- [ ] T034 [P] [US5] Update packages/gas-vite-plugin/package.json metadata: add author, repository, homepage, description fields for npm listing
-- [ ] T035 [US5] Verify package.json exports field: confirm "import", "require", and "types" conditions all resolve correctly
-- [ ] T036 [US5] Add README.md to packages/gas-vite-plugin/ with minimal usage instructions (install, configure, build)
+- [x] T034 [P] [US5] Update packages/gas-vite-plugin/package.json metadata: add author, repository, homepage, description fields for npm listing
+- [x] T035 [US5] Verify package.json exports field: confirm "import", "require", and "types" conditions all resolve correctly
+- [x] T036 [US5] Add README.md to packages/gas-vite-plugin/ with minimal usage instructions (install, configure, build)
 
 **Checkpoint**: Package is ready for `npm publish` — all artifacts present, metadata complete
 
@@ -159,10 +159,10 @@
 
 **Purpose**: Final verification, cleanup, coverage check
 
-- [ ] T037 Run full test suite with coverage: `pnpm --filter gas-vite-plugin test:coverage` — verify 100% coverage on transforms.ts
-- [ ] T038 Run biome check: `pnpm check` — fix any linting/formatting issues
-- [ ] T039 Verify quickstart.md instructions: follow the "For plugin developers" section step by step in apps/gas-script
-- [ ] T040 Add root-level test script to package.json: `"test": "pnpm -r test"`
+- [x] T037 Run full test suite with coverage: `pnpm --filter gas-vite-plugin test:coverage` — verify 100% coverage on transforms.ts
+- [x] T038 Run biome check: `pnpm check` — fix any linting/formatting issues
+- [x] T039 Verify quickstart.md instructions: follow the "For plugin developers" section step by step in apps/gas-script
+- [x] T040 Add root-level test script to package.json: `"test": "pnpm -r test"`
 
 ---
 
