@@ -15,7 +15,7 @@
 - Q: How should appsscript.json oauthScopes be handled per template? → A: Preset minimal scopes per template type (basic → spreadsheets, web app → html service, library → none). Users can add scopes as needed.
 - Q: Should scaffolded projects auto-initialize a git repository? → A: Auto git init + .gitignore generation. Skip git init if already inside a git repo.
 - Q: CLI framework and prompt library selection? → A: citty (unjs) + @clack/prompts. Aligns with unjs ecosystem (same as unplugin), TypeScript-first with strong type inference, native subcommand support with lazy loading. @clack/prompts is the industry standard adopted by create-vite.
-- Q: `@gas-plugin/create` vs `@gas-plugin/cli` package relationship? → A: Single package `@gas-plugin/cli` only. Use `create` bin entry in package.json to support `npm create @gas-plugin` convention. No separate `@gas-plugin/create` package needed.
+- Q: `@gas-plugin/create` vs `@gas-plugin/cli` package relationship? → A: Single package `@gas-plugin/cli` only. Invoked via `npx @gas-plugin/cli create`. The `npm create @gas-plugin` shorthand (requires `@gas-plugin/create` wrapper) is deferred to a future release.
 - Q: Template storage and rendering mechanism? → A: Plain file copy + lightweight string substitution (`{{projectName}}`, `{{bundler}}` placeholders). No template engine dependency. Templates are readable as-is. Same approach as create-vite and giget.
 - Q: Testing strategy for the CLI? → A: Unit tests for template generation logic (string substitution, file structure, argument parsing) + integration tests running the actual `create` command in temp directories + build verification for representative combinations (e.g., basic+vite, webapp+rollup) in CI. Uses Vitest consistent with unplugin package.
 - Q: Should scaffolded projects include a `dev` (watch) script? → A: Not in initial release. All templates generate `build` script only for now. `dev` (watch/rebuild) support is a future development item.
@@ -24,7 +24,7 @@
 
 ### User Story 1 - Create a New GAS Project from Template (Priority: P1)
 
-A developer wants to start a new Google Apps Script project quickly. They run a single command (e.g., `npx @gas-plugin/create` or `npm create @gas-plugin`), answer a few prompts (project name, template type), and get a fully configured project directory with source files, bundler config, manifest, and package.json ready to go.
+A developer wants to start a new Google Apps Script project quickly. They run a single command (e.g., `npx @gas-plugin/cli create`), answer a few prompts (project name, template type), and get a fully configured project directory with source files, bundler config, manifest, and package.json ready to go.
 
 **Why this priority**: This is the core value proposition of the CLI. Without project scaffolding, the tool has no purpose. This single feature delivers immediate value to any new GAS developer.
 
@@ -123,11 +123,11 @@ A developer wants their scaffolded project to be ready for deployment via Google
 - **FR-008**: The CLI MUST generate a `package.json` with correct dependencies, scripts (`build` only for initial release; `dev` watch mode is a future development item), and metadata.
 - **FR-009**: The CLI MUST generate TypeScript source files with a `tsconfig.json` appropriate for GAS development.
 - **FR-009a**: The CLI MUST include a Biome configuration (`biome.json`) in generated projects with lint and format rules preconfigured.
-- **FR-010**: The CLI MUST be invocable via `npx @gas-plugin/cli create`, `npm create @gas-plugin` (alias for create subcommand), or `pnpm create @gas-plugin`.
+- **FR-010**: The CLI MUST be invocable via `npx @gas-plugin/cli create`. The `npm create @gas-plugin` / `pnpm create @gas-plugin` shorthand (requires a separate `@gas-plugin/create` wrapper package) is deferred to a future release.
 - **FR-011**: The CLI MUST warn and request confirmation when the target directory is not empty.
 - **FR-012**: The CLI MUST optionally set up clasp configuration (`.clasp.json`, `.claspignore`, deploy scripts) when requested by the user.
 - **FR-013**: The CLI MUST display a success message with next steps (install, build, deploy) after scaffolding completes.
-- **FR-014**: The CLI MUST be published as a single package `@gas-plugin/cli` with a `create` bin entry in `package.json` to support `npm create @gas-plugin` / `pnpm create @gas-plugin` conventions. No separate `@gas-plugin/create` package is needed.
+- **FR-014**: The CLI MUST be published as a single package `@gas-plugin/cli` with a `gas-plugin` bin entry in `package.json`. The `npm create @gas-plugin` convenience shorthand is deferred — a thin `@gas-plugin/create` wrapper can be added later without breaking changes.
 - **FR-015**: The CLI MUST use a subcommand architecture where `create` is the initial subcommand, with the design supporting future subcommands (e.g., `deploy`, `init`) without breaking changes.
 - **FR-016**: The CLI MUST auto-detect the user's package manager (npm, pnpm, yarn, bun) from lockfiles or invocation context, and prompt to install dependencies after scaffolding (default: Yes).
 - **FR-017**: In non-interactive mode, the CLI MUST accept a `--install` / `--no-install` flag to control dependency installation. Default is to install.

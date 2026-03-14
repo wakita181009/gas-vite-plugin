@@ -126,15 +126,14 @@ function detectPackageManager(): "npm" | "pnpm" | "yarn" | "bun" {
 
 ## R7: Monorepo Integration
 
-**Decision**: Add `packages/cli` and `packages/create` to the existing pnpm workspace.
+**Decision**: Add `packages/cli` to the existing pnpm workspace.
 
 **Rationale**:
-- `pnpm-workspace.yaml` already includes `packages/*` — new packages are auto-discovered
+- `pnpm-workspace.yaml` already includes `packages/*` — new package is auto-discovered
 - Share root `biome.json`, `tsconfig.json` base config
-- `@gas-plugin/create` uses `workspace:*` dependency on `@gas-plugin/cli` for local development
-- CI pipeline already runs tests for `packages/*` — new packages integrate automatically
+- CI pipeline already runs tests for `packages/*` — new package integrates automatically
 
 **Key integration points**:
 - Root `pnpm install` installs all workspace dependencies
-- Root `pnpm build` should build CLI package (may need build order: unplugin → cli → create)
+- Root `pnpm build` should build CLI package (may need build order: unplugin → cli)
 - Root `pnpm test` should run CLI tests

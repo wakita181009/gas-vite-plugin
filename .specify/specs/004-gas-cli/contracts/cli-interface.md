@@ -72,7 +72,7 @@ Options:
 
 ## Programmatic API
 
-Exported from `@gas-plugin/cli/create` for use by `@gas-plugin/create` wrapper:
+Exported from `@gas-plugin/cli/create` for programmatic use:
 
 ```typescript
 export interface ScaffoldOptions {
