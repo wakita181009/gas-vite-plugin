@@ -1,4 +1,4 @@
-import gasPlugin from "gas-vite-plugin";
+import gasPlugin from "@gas-plugin/unplugin/vite";
 import { defineConfig } from "vite";
 
 export default defineConfig({

@@ -6,7 +6,7 @@
     "build": "vite build"
   },
   "dependencies": {
-    "gas-vite-plugin": "workspace:*"
+    "@gas-plugin/unplugin": "workspace:*"
   },
   "devDependencies": {
     "@types/google-apps-script": "^2.0.8",

@@ -42,3 +42,10 @@ pnpm -w run check     # Lint & format check with Biome
 ## Code Style
 
 TypeScript 5.x (compiled via Vite/oxc): Follow standard conventions. See `biome.json` for lint/format rules.
+
+## Active Technologies
+- TypeScript 5.x, ES2022 target, Node.js 20+ + `unplugin` (core), `tinyglobby` (glob resolution) (003-unplugin-migration)
+- N/A (build plugin, no persistence) (003-unplugin-migration)
+
+## Recent Changes
+- 003-unplugin-migration: Added TypeScript 5.x, ES2022 target, Node.js 20+ + `unplugin` (core), `tinyglobby` (glob resolution)
