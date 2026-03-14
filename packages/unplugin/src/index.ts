@@ -1,4 +1,11 @@
-import { copyFileSync, existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
+import {
+  copyFileSync,
+  existsSync,
+  mkdirSync,
+  readdirSync,
+  readFileSync,
+  writeFileSync,
+} from "node:fs";
 import { createRequire } from "node:module";
 import { dirname, resolve } from "node:path";
 import type { PluginBuild as EsbuildPluginBuild } from "esbuild";
@@ -33,6 +40,11 @@ export const unpluginFactory = (options: GasPluginOptions = {}): UnpluginOptions
 
   function copyFiles() {
     const resolvedOutDir = resolveOutDir();
+
+    if (!existsSync(resolvedOutDir)) {
+      mkdirSync(resolvedOutDir, { recursive: true });
+    }
+
     const src = resolve(rootDir, manifest);
     const dest = resolve(resolvedOutDir, "appsscript.json");
 

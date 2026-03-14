@@ -10,6 +10,7 @@ import { BIOME_VERSION, getBundler, getTemplate } from "./templates.js";
 import type { RenderContext, ScaffoldOptions } from "./types.js";
 
 const currentDir = dirname(fileURLToPath(import.meta.url));
+const deps = cliPkg.devDependencies as Record<string, string>;
 const TEMPLATES_DIR = resolve(currentDir, "../templates");
 
 /** Copy a directory recursively, renaming `_`-prefixed files to dot-prefixed. */
@@ -70,7 +71,8 @@ async function generatePackageJson(options: ScaffoldOptions, destDir: string): P
       build: bundler.buildCommand,
     },
     devDependencies: {
-      typescript: (cliPkg.devDependencies as Record<string, string>).typescript ?? "^5.8.0",
+      "@types/google-apps-script": deps["@types/google-apps-script"] ?? "^1.0.0",
+      typescript: deps.typescript ?? "^5.8.0",
       ...bundler.devDependencies,
     },
   };

@@ -59,7 +59,12 @@ export const BUNDLERS: BundlerConfig[] = [
     label: "Rollup",
     configFile: "rollup.config.mjs",
     importPath: "@gas-plugin/unplugin/rollup",
-    devDependencies: pickDeps("rollup", "@rollup/plugin-typescript", "@gas-plugin/unplugin"),
+    devDependencies: pickDeps(
+      "rollup",
+      "@rollup/plugin-typescript",
+      "tslib",
+      "@gas-plugin/unplugin",
+    ),
     buildCommand: "rollup -c",
   },
   {
