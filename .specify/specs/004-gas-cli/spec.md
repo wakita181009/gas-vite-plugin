@@ -14,6 +14,11 @@
 - Q: Should generated projects include linting/formatting config? → A: Include Biome config only (lint + format, minimal setup). Consistent with the gas-plugin ecosystem's own tooling.
 - Q: How should appsscript.json oauthScopes be handled per template? → A: Preset minimal scopes per template type (basic → spreadsheets, web app → html service, library → none). Users can add scopes as needed.
 - Q: Should scaffolded projects auto-initialize a git repository? → A: Auto git init + .gitignore generation. Skip git init if already inside a git repo.
+- Q: CLI framework and prompt library selection? → A: citty (unjs) + @clack/prompts. Aligns with unjs ecosystem (same as unplugin), TypeScript-first with strong type inference, native subcommand support with lazy loading. @clack/prompts is the industry standard adopted by create-vite.
+- Q: `@gas-plugin/create` vs `@gas-plugin/cli` package relationship? → A: Single package `@gas-plugin/cli` only. Use `create` bin entry in package.json to support `npm create @gas-plugin` convention. No separate `@gas-plugin/create` package needed.
+- Q: Template storage and rendering mechanism? → A: Plain file copy + lightweight string substitution (`{{projectName}}`, `{{bundler}}` placeholders). No template engine dependency. Templates are readable as-is. Same approach as create-vite and giget.
+- Q: Testing strategy for the CLI? → A: Unit tests for template generation logic (string substitution, file structure, argument parsing) + integration tests running the actual `create` command in temp directories + build verification for representative combinations (e.g., basic+vite, webapp+rollup) in CI. Uses Vitest consistent with unplugin package.
+- Q: Should scaffolded projects include a `dev` (watch) script? → A: Not in initial release. All templates generate `build` script only for now. `dev` (watch/rebuild) support is a future development item.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -115,14 +120,14 @@ A developer wants their scaffolded project to be ready for deployment via Google
 - **FR-005**: The CLI MUST support bundler selection for at least: Vite, Rollup, esbuild, and webpack.
 - **FR-006**: The CLI MUST generate a valid `appsscript.json` manifest for each template, with minimal preset OAuth scopes appropriate to the template type (e.g., spreadsheet scope for basic script, HTML service scope for web app, no scopes for library).
 - **FR-007**: The CLI MUST generate a bundler configuration file preconfigured with the appropriate `@gas-plugin/unplugin/*` subpath export.
-- **FR-008**: The CLI MUST generate a `package.json` with correct dependencies, scripts (`build`, `dev` where applicable), and metadata.
+- **FR-008**: The CLI MUST generate a `package.json` with correct dependencies, scripts (`build` only for initial release; `dev` watch mode is a future development item), and metadata.
 - **FR-009**: The CLI MUST generate TypeScript source files with a `tsconfig.json` appropriate for GAS development.
 - **FR-009a**: The CLI MUST include a Biome configuration (`biome.json`) in generated projects with lint and format rules preconfigured.
 - **FR-010**: The CLI MUST be invocable via `npx @gas-plugin/cli create`, `npm create @gas-plugin` (alias for create subcommand), or `pnpm create @gas-plugin`.
 - **FR-011**: The CLI MUST warn and request confirmation when the target directory is not empty.
 - **FR-012**: The CLI MUST optionally set up clasp configuration (`.clasp.json`, `.claspignore`, deploy scripts) when requested by the user.
 - **FR-013**: The CLI MUST display a success message with next steps (install, build, deploy) after scaffolding completes.
-- **FR-014**: The CLI MUST be published as `@gas-plugin/cli` (main extensible CLI) and additionally as `@gas-plugin/create` (for `npm create @gas-plugin` convention, delegates to `@gas-plugin/cli create`).
+- **FR-014**: The CLI MUST be published as a single package `@gas-plugin/cli` with a `create` bin entry in `package.json` to support `npm create @gas-plugin` / `pnpm create @gas-plugin` conventions. No separate `@gas-plugin/create` package is needed.
 - **FR-015**: The CLI MUST use a subcommand architecture where `create` is the initial subcommand, with the design supporting future subcommands (e.g., `deploy`, `init`) without breaking changes.
 - **FR-016**: The CLI MUST auto-detect the user's package manager (npm, pnpm, yarn, bun) from lockfiles or invocation context, and prompt to install dependencies after scaffolding (default: Yes).
 - **FR-017**: In non-interactive mode, the CLI MUST accept a `--install` / `--no-install` flag to control dependency installation. Default is to install.
@@ -131,7 +136,7 @@ A developer wants their scaffolded project to be ready for deployment via Google
 ### Key Entities
 
 - **CLI**: The extensible command-line tool (`@gas-plugin/cli`) with a subcommand router. Initial subcommand: `create`. Future subcommands can be added without architectural changes.
-- **Template**: A predefined project structure with source files, config files, and manifest tailored to a specific GAS project type (basic script, web app, library).
+- **Template**: A predefined project structure with source files, config files, and manifest tailored to a specific GAS project type (basic script, web app, library). Templates are stored as plain files with `{{variable}}` placeholders, rendered via simple string substitution (no template engine).
 - **Bundler Config**: A generated configuration file specific to the chosen bundler (vite.config.ts, rollup.config.mjs, etc.) preconfigured with the `@gas-plugin/*` plugin.
 - **Project Manifest**: The `appsscript.json` file that defines GAS project settings (runtime version, scopes, web app configuration).
 
@@ -145,9 +150,11 @@ A developer wants their scaffolded project to be ready for deployment via Google
 - **SC-004**: Non-interactive mode generates identical output to interactive mode when given equivalent options.
 - **SC-005**: The generated project's build output is a valid GAS-compatible bundle (no export keywords, manifest present, globals protected where applicable).
 - **SC-006**: The CLI provides clear, actionable error messages for all invalid inputs.
+- **SC-007**: Unit tests cover template generation logic (string substitution, file structure output). Integration tests verify end-to-end `create` command execution in temp directories. Representative template+bundler combinations build successfully in CI.
 
 ## Assumptions
 
+- The CLI is built with `citty` (unjs CLI framework) for subcommand routing/argument parsing and `@clack/prompts` for interactive prompts. This aligns with the unjs ecosystem used by `@gas-plugin/unplugin`.
 - The CLI depends on the unplugin migration (Feature 003) being complete, as templates reference `@gas-plugin/unplugin` subpath exports.
 - Templates are bundled within the CLI package (not fetched from a remote registry), ensuring offline operation.
 - The default bundler suggestion is Vite, as it is the most common choice in the modern JS ecosystem and the original bundler this plugin was built for.
