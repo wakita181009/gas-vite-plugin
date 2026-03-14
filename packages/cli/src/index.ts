@@ -1,9 +1,11 @@
 import { defineCommand, runMain } from "citty";
+// @ts-expect-error -- JSON import is resolved by Vite at build time
+import cliPkg from "../package.json" with { type: "json" };
 
 const main = defineCommand({
   meta: {
     name: "gas-plugin",
-    version: "0.1.0",
+    version: cliPkg.version,
     description: "Extensible CLI tool for Google Apps Script projects",
   },
   subCommands: {

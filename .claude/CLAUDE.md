@@ -53,6 +53,16 @@ pnpm test             # Run tests
 pnpm -w run check     # Lint & format check with Biome
 ```
 
+## Versioning
+
+`@gas-plugin/unplugin` and `@gas-plugin/cli` share the same version. To bump:
+
+```bash
+pnpm -r exec -- npm version <ver> --no-git-tag-version
+```
+
+`gas-vite-plugin` (deprecated) is also updated but that is fine.
+
 ## Code Style
 
 TypeScript 5.x (compiled via Vite/oxc): Follow standard conventions. See `biome.json` for lint/format rules.
