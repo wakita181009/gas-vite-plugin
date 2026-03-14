@@ -3,6 +3,8 @@ import { existsSync } from "node:fs";
 import { mkdir, readdir, writeFile } from "node:fs/promises";
 import { basename, dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+// @ts-expect-error -- JSON import is resolved by Vite at build time
+import cliPkg from "../../package.json" with { type: "json" };
 import { initGit } from "./git.js";
 import { renderFile } from "./render.js";
 import { getBundler, getTemplate } from "./templates.js";
@@ -69,7 +71,7 @@ async function generatePackageJson(options: ScaffoldOptions, destDir: string): P
       build: bundler.buildCommand,
     },
     devDependencies: {
-      typescript: "^5.8.0",
+      typescript: (cliPkg.devDependencies as Record<string, string>).typescript ?? "^5.8.0",
       ...bundler.devDependencies,
     },
   };

@@ -1,4 +1,21 @@
+// @ts-expect-error -- JSON import is resolved by Vite at build time
+import cliPkg from "../../package.json" with { type: "json" };
 import type { BundlerConfig, BundlerId, TemplateDefinition, TemplateId } from "./types.js";
+
+const deps = cliPkg.devDependencies as Record<string, string>;
+
+/** Pick specific keys from the CLI devDependencies, replacing workspace: protocol with latest. */
+function pickDeps(...keys: string[]): Record<string, string> {
+  const result: Record<string, string> = {};
+  for (const key of keys) {
+    const ver = deps[key];
+    if (ver) {
+      // workspace:* → "latest" for published packages
+      result[key] = ver.startsWith("workspace:") ? "latest" : ver;
+    }
+  }
+  return result;
+}
 
 export const TEMPLATES: TemplateDefinition[] = [
   {
@@ -36,10 +53,7 @@ export const BUNDLERS: BundlerConfig[] = [
     label: "Vite",
     configFile: "vite.config.ts",
     importPath: "@gas-plugin/unplugin/vite",
-    devDependencies: {
-      vite: "^8.0.0",
-      "@gas-plugin/unplugin": "^0.0.6",
-    },
+    devDependencies: pickDeps("vite", "@gas-plugin/unplugin"),
     buildCommand: "vite build",
   },
   {
@@ -47,11 +61,7 @@ export const BUNDLERS: BundlerConfig[] = [
     label: "Rollup",
     configFile: "rollup.config.mjs",
     importPath: "@gas-plugin/unplugin/rollup",
-    devDependencies: {
-      rollup: "^4.0.0",
-      "@rollup/plugin-typescript": "^12.0.0",
-      "@gas-plugin/unplugin": "^0.0.6",
-    },
+    devDependencies: pickDeps("rollup", "@rollup/plugin-typescript", "@gas-plugin/unplugin"),
     buildCommand: "rollup -c",
   },
   {
@@ -59,10 +69,7 @@ export const BUNDLERS: BundlerConfig[] = [
     label: "esbuild",
     configFile: "esbuild.config.mjs",
     importPath: "@gas-plugin/unplugin/esbuild",
-    devDependencies: {
-      esbuild: "^0.27.0",
-      "@gas-plugin/unplugin": "^0.0.6",
-    },
+    devDependencies: pickDeps("esbuild", "@gas-plugin/unplugin"),
     buildCommand: "node esbuild.config.mjs",
   },
   {
@@ -70,12 +77,7 @@ export const BUNDLERS: BundlerConfig[] = [
     label: "webpack",
     configFile: "webpack.config.mjs",
     importPath: "@gas-plugin/unplugin/webpack",
-    devDependencies: {
-      webpack: "^5.0.0",
-      "webpack-cli": "^6.0.0",
-      "ts-loader": "^9.0.0",
-      "@gas-plugin/unplugin": "^0.0.6",
-    },
+    devDependencies: pickDeps("webpack", "webpack-cli", "ts-loader", "@gas-plugin/unplugin"),
     buildCommand: "webpack",
   },
 ];
