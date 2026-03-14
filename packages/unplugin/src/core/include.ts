@@ -30,7 +30,7 @@ export function copyFilesFlat(files: string[], outDir: string): void {
 
     if (seen.has(name)) {
       console.warn(
-        `[gas-vite-plugin] filename collision: "${name}" from "${file}" skipped (already copied from "${seen.get(name)}")`,
+        `[@gas-plugin/unplugin] filename collision: "${name}" from "${file}" skipped (already copied from "${seen.get(name)}")`,
       );
       continue;
     }

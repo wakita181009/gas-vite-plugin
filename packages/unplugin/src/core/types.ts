@@ -1,25 +1,29 @@
-/**
- * Public API contract for gas-vite-plugin v0.2
- *
- * This file documents the TypeScript interface that users interact with.
- * It is NOT compiled — it serves as a contract reference for implementation.
- */
+export interface WebpackCompiler {
+  options: {
+    context?: string;
+    output: { path?: string };
+  };
+  hooks: {
+    afterEmit: {
+      tapAsync: (name: string, cb: (compilation: unknown, callback: () => void) => void) => void;
+    };
+  };
+}
 
 export interface GasPluginOptions {
   /**
    * Path to appsscript.json manifest file.
-   * Resolved relative to Vite's `root`.
+   * Resolved relative to the project root.
    * @default "src/appsscript.json"
    */
   manifest?: string;
 
   /**
    * Glob patterns for additional files to copy flat to the output directory.
-   * Resolved relative to Vite's `root` via tinyglobby.
+   * Resolved relative to the project root via tinyglobby.
    * Files are copied without subdirectory structure (basename only).
    * Duplicate basenames trigger a warning; the first match wins.
    *
-   * @example ["src/**/*.html", "src/**/*.css"]
    * @default []
    */
   include?: string[];
@@ -29,10 +33,6 @@ export interface GasPluginOptions {
    * These functions will be kept as top-level declarations in the output,
    * even if they are not exported from the entry point.
    *
-   * Use this for functions called by GAS via string name (e.g., menu handlers,
-   * time-driven trigger targets).
-   *
-   * @example ["processData", "onTimeTrigger"]
    * @default []
    */
   globals?: string[];

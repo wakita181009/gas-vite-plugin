@@ -9,8 +9,8 @@
 
 | Spec | Section |
 |------|---------|
-| `.specify/specs/001-gas-vite-plugin-v01/spec.md` | User Story 1, FR-001 through FR-003, FR-010, FR-012, FR-014 |
-| `.specify/specs/002-gas-vite-plugin-v02/spec.md` | User Story 4, FR-004 through FR-008 |
+| 001-gas-vite-plugin-v01 (archived) | User Story 1, FR-001 through FR-003, FR-010, FR-012, FR-014 |
+| 002-gas-vite-plugin-v02 (archived) | User Story 4, FR-004 through FR-008 |
 
 ## Business Rules
 

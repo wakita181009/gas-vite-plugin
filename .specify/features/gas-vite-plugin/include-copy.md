@@ -9,7 +9,7 @@
 
 | Spec | Section |
 |------|---------|
-| `.specify/specs/002-gas-vite-plugin-v02/spec.md` | User Story 1, FR-001, FR-009, FR-010 |
+| 002-gas-vite-plugin-v02 (archived) | User Story 1, FR-001, FR-009, FR-010 |
 
 ## Business Rules
 

@@ -9,8 +9,8 @@
 
 | Spec | Section |
 |------|---------|
-| `.specify/specs/001-gas-vite-plugin-v01/spec.md` | User Story 2, FR-004, FR-013 |
-| `.specify/specs/002-gas-vite-plugin-v02/spec.md` | FR-010 (include must not affect manifest copy) |
+| 001-gas-vite-plugin-v01 (archived) | User Story 2, FR-004, FR-013 |
+| 002-gas-vite-plugin-v02 (archived) | FR-010 (include must not affect manifest copy) |
 
 ## Business Rules
 
