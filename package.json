@@ -1,9 +1,9 @@
 {
-  "name": "gas-vite-plugin-monorepo",
+  "name": "gas-plugin-monorepo",
   "private": true,
   "scripts": {
     "build": "pnpm -r build",
-    "test": "pnpm --filter gas-vite-plugin test",
+    "test": "pnpm -r test",
     "check": "biome check ."
   },
   "devDependencies": {

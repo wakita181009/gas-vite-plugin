@@ -1,5 +1,4 @@
 import { defineCommand, runMain } from "citty";
-// @ts-expect-error -- JSON import is resolved by Vite at build time
 import cliPkg from "../package.json" with { type: "json" };
 
 const main = defineCommand({

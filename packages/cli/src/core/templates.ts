@@ -1,4 +1,3 @@
-// @ts-expect-error -- JSON import is resolved by Vite at build time
 import cliPkg from "../../package.json" with { type: "json" };
 import type { BundlerConfig, BundlerId, TemplateDefinition, TemplateId } from "./types.js";
 
