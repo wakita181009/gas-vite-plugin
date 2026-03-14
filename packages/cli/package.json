@@ -21,10 +21,10 @@
     "README.md"
   ],
   "scripts": {
-    "build": "vite build && node scripts/postbuild.js",
+    "build": "vite build",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
-    "prepublishOnly": "vite build && node scripts/postbuild.js"
+    "prepublishOnly": "vite build"
   },
   "keywords": [
     "google-apps-script",

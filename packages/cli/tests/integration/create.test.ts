@@ -187,6 +187,14 @@ describe("scaffold - library template", () => {
     const config = readFileSync(join(opts.targetDir, "vite.config.ts"), "utf-8");
     expect(config).not.toContain("globals:");
   });
+
+  it("generates clean bundler config with no empty lines in plugin options", async () => {
+    const opts = makeOptions(tempDir, { template: "library" });
+    await scaffold(opts);
+    const config = readFileSync(join(opts.targetDir, "vite.config.ts"), "utf-8");
+    // No empty lines between gasPlugin({ and })
+    expect(config).not.toMatch(/gasPlugin\(\{\n\s*\n/);
+  });
 });
 
 describe("scaffold - clasp integration", () => {

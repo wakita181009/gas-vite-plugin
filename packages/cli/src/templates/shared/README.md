@@ -14,7 +14,7 @@ npm install
 
 ## Deployment
 
-1. Install [clasp](https://github.com/nicr-org/clasp): `npm install -g @nicr-org/clasp`
+1. Install [clasp](https://github.com/google/clasp): `npm install -g @google/clasp`
 2. Login: `clasp login`
 3. Create or link a GAS project: `clasp create` or `clasp clone <scriptId>`
 4. Push to GAS: `clasp push`

@@ -1,8 +1,18 @@
-import { defineConfig } from "vite";
+import { cpSync } from "node:fs";
+import { defineConfig, type Plugin } from "vite";
 import dts from "vite-plugin-dts";
 
+function copyTemplates(): Plugin {
+  return {
+    name: "copy-templates",
+    closeBundle() {
+      cpSync("src/templates", "dist/templates", { recursive: true });
+    },
+  };
+}
+
 export default defineConfig({
-  plugins: [dts({ rollupTypes: true, tsconfigPath: "./tsconfig.json" })],
+  plugins: [dts({ rollupTypes: true, tsconfigPath: "./tsconfig.json" }), copyTemplates()],
   build: {
     lib: {
       entry: {

@@ -51,4 +51,28 @@ describe("renderTemplate", () => {
     const result = renderTemplate("scopes: {{oauthScopes}}", baseContext);
     expect(result).toBe('scopes: ["https://www.googleapis.com/auth/spreadsheets"]');
   });
+
+  it("removes entire line when lone placeholder resolves to empty string", () => {
+    const ctx: RenderContext = { ...baseContext, optionalLine: "" };
+    const input = "before\n{{optionalLine}}\nafter";
+    expect(renderTemplate(input, ctx)).toBe("before\nafter");
+  });
+
+  it("removes indented line when lone placeholder resolves to empty string", () => {
+    const ctx: RenderContext = { ...baseContext, optionalLine: "" };
+    const input = "before\n    {{optionalLine}}\nafter";
+    expect(renderTemplate(input, ctx)).toBe("before\nafter");
+  });
+
+  it("keeps line when lone placeholder resolves to non-empty string", () => {
+    const ctx: RenderContext = { ...baseContext, optionalLine: "    value: true," };
+    const input = "before\n{{optionalLine}}\nafter";
+    expect(renderTemplate(input, ctx)).toBe("before\n    value: true,\nafter");
+  });
+
+  it("removes multiple consecutive empty placeholder lines", () => {
+    const ctx: RenderContext = { ...baseContext, a: "", b: "", c: "    keep: true," };
+    const input = "start\n{{a}}\n{{b}}\n{{c}}\nend";
+    expect(renderTemplate(input, ctx)).toBe("start\n    keep: true,\nend");
+  });
 });

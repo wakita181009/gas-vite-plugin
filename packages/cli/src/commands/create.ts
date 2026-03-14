@@ -20,8 +20,8 @@ async function resolveProjectName(name: string | undefined, useDefaults: boolean
     placeholder: "my-gas-app",
     validate: (value) => {
       if (!value) return "Project name is required";
-      if (!/^[a-z0-9][a-z0-9._-]*$/.test(value)) {
-        return "Must start with a lowercase letter or number and contain only lowercase letters, numbers, hyphens, dots, or underscores";
+      if (!/^[a-z][a-z0-9._-]*$/.test(value)) {
+        return "Must start with a lowercase letter and contain only lowercase letters, numbers, hyphens, dots, or underscores";
       }
     },
   });
