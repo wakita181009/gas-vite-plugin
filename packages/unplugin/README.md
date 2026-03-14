@@ -1,5 +1,10 @@
 # @gas-plugin/unplugin
 
+[![CI](https://github.com/wakita181009/gas-plugin/actions/workflows/ci.yml/badge.svg)](https://github.com/wakita181009/gas-plugin/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/wakita181009/gas-plugin/graph/badge.svg)](https://codecov.io/gh/wakita181009/gas-plugin)
+[![npm Version](https://img.shields.io/npm/v/@gas-plugin/unplugin.svg)](https://www.npmjs.com/package/@gas-plugin/unplugin)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
 A universal bundler plugin for Google Apps Script (GAS) projects. Works with **Vite**, **Rollup**, **webpack**, **esbuild**, and **Bun**.
 
 ## What It Does

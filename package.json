@@ -4,6 +4,7 @@
   "scripts": {
     "build": "pnpm -r build",
     "test": "pnpm -r test",
+    "test:coverage": "pnpm -r test:coverage",
     "test:e2e": "pnpm --filter @gas-plugin/unplugin build && vitest run --config e2e/vitest.config.ts",
     "check": "biome check ."
   },

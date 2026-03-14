@@ -1,5 +1,10 @@
 # @gas-plugin/cli
 
+[![CI](https://github.com/wakita181009/gas-plugin/actions/workflows/ci.yml/badge.svg)](https://github.com/wakita181009/gas-plugin/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/wakita181009/gas-plugin/graph/badge.svg)](https://codecov.io/gh/wakita181009/gas-plugin)
+[![npm Version](https://img.shields.io/npm/v/@gas-plugin/cli.svg)](https://www.npmjs.com/package/@gas-plugin/cli)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
 Extensible CLI tool for scaffolding Google Apps Script projects. Generates a ready-to-build project with your choice of bundler and template.
 
 ## Quick Start
