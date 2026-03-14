@@ -88,12 +88,9 @@ pnpm -w run check
 ## Useful Commands
 
 ```bash
-# Test the create wrapper package
-pnpm --filter @gas-plugin/create exec create-gas-plugin
-
 # Check package exports are correct
 node -e "import('@gas-plugin/cli/create')"
 
-# Verify workspace dependency resolution
-pnpm ls --filter @gas-plugin/create
+# Test the CLI binary directly
+node packages/cli/dist/index.js --help
 ```

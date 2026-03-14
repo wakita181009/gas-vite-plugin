@@ -7,7 +7,7 @@
 
 Build `@gas-plugin/cli`, an extensible CLI tool for scaffolding Google Apps Script projects. The initial release focuses on a `create` subcommand that generates fully configured, buildable GAS projects with template selection (basic script, web app, library), bundler selection (Vite, Rollup, esbuild, webpack), and optional clasp integration. Built with `citty` (unjs) for subcommand routing and `@clack/prompts` for interactive prompts, published as a new package in the existing pnpm monorepo.
 
-A separate thin `@gas-plugin/create` package is required to support the `npm create @gas-plugin` convention, which delegates to `@gas-plugin/cli`'s scaffolding logic.
+The `npm create @gas-plugin` shorthand (`@gas-plugin/create` wrapper) is deferred — can be added later as a thin wrapper without breaking changes. Initial release uses `npx @gas-plugin/cli create` only.
 
 ## Technical Context
 
@@ -90,14 +90,9 @@ packages/
     tsconfig.json
     vite.config.ts                  # Build config (Vite library mode)
 
-  create/                           # @gas-plugin/create (thin wrapper)
-    src/
-      index.ts                      # Delegates to @gas-plugin/cli create logic
-    package.json
-    tsconfig.json
 ```
 
-**Structure Decision**: Two packages in `packages/` — `cli` (full CLI with subcommand architecture) and `create` (thin wrapper for `npm create @gas-plugin` convention). This follows the pattern used by Nuxt (`nuxi` + `create-nuxt`) and is required because `npm create @scope` hardcodes resolution to `@scope/create`. The `create` package is ~5 lines that import and run the scaffolding logic from `@gas-plugin/cli`.
+**Structure Decision**: Single `packages/cli` package with extensible subcommand architecture. `@gas-plugin/create` wrapper for `npm create @gas-plugin` is deferred — can be added later as a 5-line thin wrapper without breaking changes.
 
 ## Test Strategy
 

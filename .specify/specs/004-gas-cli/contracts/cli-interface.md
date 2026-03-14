@@ -27,22 +27,6 @@
 }
 ```
 
-### @gas-plugin/create
-
-```jsonc
-{
-  "name": "@gas-plugin/create",
-  "version": "0.1.0",
-  "type": "module",
-  "bin": {
-    "create-gas-plugin": "./dist/index.js"
-  },
-  "dependencies": {
-    "@gas-plugin/cli": "workspace:*"
-  }
-}
-```
-
 ## CLI Command Interface
 
 ### Top-level

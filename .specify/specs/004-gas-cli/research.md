@@ -48,30 +48,16 @@
 
 ## R3: `npm create @gas-plugin` Convention — Package Strategy
 
-**Decision**: Publish two packages: `@gas-plugin/cli` (full CLI) + `@gas-plugin/create` (thin wrapper).
+**Decision**: Single `@gas-plugin/cli` package only. `@gas-plugin/create` wrapper deferred.
 
 **Rationale**:
-- `npm create @scope` is hardcoded to resolve to `@scope/create` — this is non-configurable in npm/pnpm/yarn
-- A single package cannot serve both `npx @gas-plugin/cli create` AND `npm create @gas-plugin`
-- The `@gas-plugin/create` package is a thin 5-line entry point that imports and runs the scaffolding logic from `@gas-plugin/cli`
-- This pattern is used by every major scaffolding tool: `create-vite` (standalone), `create-next-app` (standalone), `create-nuxt` (delegates to `nuxi`)
-
-**Resolution rules**:
-| Command | Resolves to |
-|---------|-------------|
-| `npm create @gas-plugin` | `@gas-plugin/create` |
-| `pnpm create @gas-plugin` | `@gas-plugin/create` |
-| `npx @gas-plugin/cli create` | `@gas-plugin/cli` (passes `create` as argv) |
+- `npm create @scope` is hardcoded to resolve to `@scope/create` — would require a separate package
+- Initial release uses `npx @gas-plugin/cli create` which is sufficient
+- CLI will grow with subcommands (`init`, `deploy`, etc.) — single package is simpler to maintain
+- `@gas-plugin/create` can be added later as a 5-line thin wrapper without breaking changes
 
 **Package configuration**:
 ```jsonc
-// @gas-plugin/create/package.json
-{
-  "name": "@gas-plugin/create",
-  "bin": { "create-gas-plugin": "./dist/index.js" },
-  "dependencies": { "@gas-plugin/cli": "workspace:*" }
-}
-
 // @gas-plugin/cli/package.json
 {
   "name": "@gas-plugin/cli",
@@ -79,9 +65,7 @@
 }
 ```
 
-**Alternatives considered**:
-- Single `@gas-plugin/cli` package only: Would break `npm create @gas-plugin` convention. Users would need `npx @gas-plugin/cli create` which is verbose.
-- Single `@gas-plugin/create` package only: Cannot grow into a multi-subcommand CLI (deploy, init, etc.).
+**Deferred**: `@gas-plugin/create` wrapper for `npm create @gas-plugin` / `pnpm create @gas-plugin` convenience — add when user demand justifies it.
 
 ## R4: Template Rendering Strategy
 
