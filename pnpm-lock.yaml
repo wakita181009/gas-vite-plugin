@@ -47,6 +47,9 @@ importers:
         specifier: ^0.2.1
         version: 0.2.1
     devDependencies:
+      '@biomejs/biome':
+        specifier: ^2.4.7
+        version: 2.4.7
       '@gas-plugin/unplugin':
         specifier: workspace:*
         version: link:../unplugin
