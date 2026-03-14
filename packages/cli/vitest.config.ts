@@ -11,6 +11,7 @@ export default defineConfig({
         "src/core/detect.ts",
         "src/core/git.ts",
         "src/core/scaffold.ts",
+        "src/core/validate.ts",
       ],
       thresholds: {
         statements: 80,

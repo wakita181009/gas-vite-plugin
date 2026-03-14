@@ -1,4 +1,3 @@
-import { existsSync, readdirSync } from "node:fs";
 import { resolve } from "node:path";
 import * as p from "@clack/prompts";
 import { defineCommand } from "citty";
@@ -6,6 +5,12 @@ import { detectPackageManager } from "../core/detect.js";
 import { scaffold } from "../core/scaffold.js";
 import { BUNDLERS, TEMPLATES } from "../core/templates.js";
 import type { BundlerId, ScaffoldOptions, TemplateId } from "../core/types.js";
+import {
+  isTargetDirEmpty,
+  validateBundlerFlag,
+  validateProjectName,
+  validateTemplateFlag,
+} from "../core/validate.js";
 
 function cancelAndExit(message = "Operation cancelled.", code = 1): never {
   p.cancel(message);
@@ -18,12 +23,7 @@ async function resolveProjectName(name: string | undefined, useDefaults: boolean
   const result = await p.text({
     message: "Project name:",
     placeholder: "my-gas-app",
-    validate: (value) => {
-      if (!value) return "Project name is required";
-      if (!/^[a-z][a-z0-9._-]*$/.test(value)) {
-        return "Must start with a lowercase letter and contain only lowercase letters, numbers, hyphens, dots, or underscores";
-      }
-    },
+    validate: (value) => validateProjectName(value ?? ""),
   });
   if (p.isCancel(result)) cancelAndExit();
   return result;
@@ -34,11 +34,9 @@ async function resolveTemplate(
   useDefaults: boolean,
 ): Promise<TemplateId> {
   if (flag) {
-    const valid = TEMPLATES.map((t) => t.id);
-    if (!valid.includes(flag as TemplateId)) {
-      cancelAndExit(`Invalid template: "${flag}". Available: ${valid.join(", ")}`, 2);
-    }
-    return flag as TemplateId;
+    const result = validateTemplateFlag(flag);
+    if (result !== flag) cancelAndExit(result, 2);
+    return result as TemplateId;
   }
   if (useDefaults) return "basic";
   const result = await p.select({
@@ -55,11 +53,9 @@ async function resolveTemplate(
 
 async function resolveBundler(flag: string | undefined, useDefaults: boolean): Promise<BundlerId> {
   if (flag) {
-    const valid = BUNDLERS.map((b) => b.id);
-    if (!valid.includes(flag as BundlerId)) {
-      cancelAndExit(`Invalid bundler: "${flag}". Available: ${valid.join(", ")}`, 2);
-    }
-    return flag as BundlerId;
+    const result = validateBundlerFlag(flag);
+    if (result !== flag) cancelAndExit(result, 2);
+    return result as BundlerId;
   }
   if (useDefaults) return "vite";
   const result = await p.select({
@@ -91,7 +87,7 @@ async function checkTargetDir(
   force: boolean,
   useDefaults: boolean,
 ): Promise<void> {
-  if (!existsSync(targetDir) || readdirSync(targetDir).length === 0) return;
+  if (isTargetDirEmpty(targetDir)) return;
   if (force) return;
   if (useDefaults) {
     cancelAndExit(`Target directory "${projectName}" is not empty. Use --force to overwrite.`, 3);

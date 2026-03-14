@@ -4,6 +4,7 @@ import {
   BUNDLERS,
   getBundler,
   getTemplate,
+  pickDeps,
   TEMPLATES,
 } from "../../src/core/templates.js";
 
@@ -71,6 +72,24 @@ describe("BUNDLERS registry", () => {
       expect(b.buildCommand).toBeTruthy();
       expect(typeof b.devDependencies).toBe("object");
     }
+  });
+});
+
+describe("pickDeps", () => {
+  it("picks existing dependencies from package.json", () => {
+    const result = pickDeps("vite");
+    expect(result).toHaveProperty("vite");
+    expect(result.vite).toMatch(/^\^?\d/);
+  });
+
+  it("skips non-existent dependency keys", () => {
+    const result = pickDeps("nonExistentPackage");
+    expect(result).toEqual({});
+  });
+
+  it("replaces workspace: protocol with latest", () => {
+    const result = pickDeps("@gas-plugin/unplugin");
+    expect(result["@gas-plugin/unplugin"]).toBe("latest");
   });
 });
 

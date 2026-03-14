@@ -9,7 +9,7 @@ function stripRange(version: string): string {
 }
 
 /** Pick specific keys from the CLI devDependencies, replacing workspace: protocol with latest. */
-function pickDeps(...keys: string[]): Record<string, string> {
+export function pickDeps(...keys: string[]): Record<string, string> {
   const result: Record<string, string> = {};
   for (const key of keys) {
     const ver = deps[key];
