@@ -167,9 +167,9 @@ export default defineCommand({
     );
     const clasp = await resolveConfirm(
       args.clasp,
-      useDefaults || args.clasp,
+      useDefaults,
       "Include clasp configuration?",
-      false,
+      true,
     );
     const scriptId = args["script-id"];
     const targetDir = resolve(process.cwd(), projectName);
