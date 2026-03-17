@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.3](https://github.com/wakita181009/gas-plugin/compare/cli-v0.1.2...cli-v0.1.3) (2026-03-17)
+
+
+### Miscellaneous Chores
+
+* **cli:** Synchronize gas-plugin versions
+
 ## [0.1.2](https://github.com/wakita181009/gas-plugin/compare/cli-v0.1.1...cli-v0.1.2) (2026-03-17)
 
 
