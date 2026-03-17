@@ -57,6 +57,9 @@
   ],
   "author": "wakita181009",
   "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
   "dependencies": {
     "tinyglobby": "^0.2.15",
     "unplugin": "^3.0.0"
