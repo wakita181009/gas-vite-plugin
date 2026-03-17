@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.2](https://github.com/wakita181009/gas-plugin/compare/unplugin-v0.1.1...unplugin-v0.1.2) (2026-03-17)
+
+
+### Bug Fixes
+
+* add engines field requiring Node.js &gt;=20 ([#10](https://github.com/wakita181009/gas-plugin/issues/10)) ([afd0af9](https://github.com/wakita181009/gas-plugin/commit/afd0af97ada2dda715955ef3eaed337d21744531))
+
 ## [0.1.0](https://github.com/wakita181009/gas-plugin/compare/unplugin-v0.0.13...unplugin-v0.1.0) (2026-03-17)
 
 
