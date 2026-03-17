@@ -5,7 +5,7 @@
 [![npm Version](https://img.shields.io/npm/v/@gas-plugin/unplugin.svg)](https://www.npmjs.com/package/@gas-plugin/unplugin)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-A universal bundler plugin for Google Apps Script (GAS) projects. Works with **Vite**, **Rollup**, **webpack**, **esbuild**, and **Bun**.
+A universal bundler plugin for Google Apps Script (GAS) projects. Works with **Vite**, **Rollup**, **Rolldown**, **webpack**, **esbuild**, and **Bun**.
 
 ## What It Does
 
@@ -90,6 +90,19 @@ await build({
   format: "esm",
   plugins: [gasPlugin()],
 });
+```
+
+### Rolldown
+
+```ts
+// rolldown.config.mjs
+import gasPlugin from "@gas-plugin/unplugin/rolldown";
+
+export default {
+  input: "src/main.ts",
+  output: { dir: "dist", format: "es" },
+  plugins: [gasPlugin()],
+};
 ```
 
 ### Bun
@@ -196,13 +209,14 @@ export default defineConfig({
 
 ## Compatibility
 
-| Bundler  | Version   |
-| -------- | --------- |
-| Vite     | >= 5.0.0  |
-| Rollup   | >= 4.0.0  |
-| webpack  | >= 5.0.0  |
-| esbuild  | >= 0.17.0 |
-| Bun      | latest    |
+| Bundler  | Version        |
+| -------- | -------------- |
+| Vite     | >= 5.0.0       |
+| Rollup   | >= 4.0.0       |
+| Rolldown | >= 1.0.0-rc.1  |
+| webpack  | >= 5.0.0       |
+| esbuild  | >= 0.17.0      |
+| Bun      | latest         |
 
 **Node.js**: >= 20
 
