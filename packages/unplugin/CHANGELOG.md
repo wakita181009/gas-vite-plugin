@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.3](https://github.com/wakita181009/gas-plugin/compare/unplugin-v0.1.2...unplugin-v0.1.3) (2026-03-17)
+
+
+### Bug Fixes
+
+* **ci:** use GH_PAT for release-please to enable workflow triggers ([0ac7404](https://github.com/wakita181009/gas-plugin/commit/0ac74044b6863633e6761a68520780f73ec8f648))
+
 ## [0.1.2](https://github.com/wakita181009/gas-plugin/compare/unplugin-v0.1.1...unplugin-v0.1.2) (2026-03-17)
 
 
