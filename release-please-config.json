@@ -1,0 +1,24 @@
+{
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+  "packages": {
+    "packages/unplugin": {
+      "component": "unplugin",
+      "release-type": "node"
+    },
+    "packages/cli": {
+      "component": "cli",
+      "release-type": "node"
+    }
+  },
+  "plugins": [
+    {
+      "type": "linked-versions",
+      "groupName": "gas-plugin",
+      "components": ["unplugin", "cli"]
+    }
+  ],
+  "pull-request-title-pattern": "chore: release ${version}",
+  "pull-request-header": ":robot: I have created a release *beep* *boop*",
+  "group-pull-request-title-pattern": "chore: release ${version}",
+  "separate-pull-requests": false
+}
