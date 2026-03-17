@@ -20,7 +20,8 @@
     {
       "type": "linked-versions",
       "groupName": "gas-plugin",
-      "components": ["unplugin", "cli"]
+      "components": ["unplugin", "cli"],
+      "merge": true
     }
   ],
   "pull-request-title-pattern": "chore: release ${component} ${version}",
