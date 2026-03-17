@@ -1,7 +1,6 @@
 {
   "name": "gas-webapp",
   "private": true,
-  "version": "0.0.13",
   "type": "module",
   "scripts": {
     "build": "vite build"
