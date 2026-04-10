@@ -61,7 +61,7 @@
     "node": ">=20"
   },
   "dependencies": {
-    "tinyglobby": "^0.2.15",
+    "tinyglobby": "^0.2.16",
     "unplugin": "^3.0.0"
   },
   "peerDependencies": {
