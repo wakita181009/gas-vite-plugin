@@ -44,20 +44,20 @@
     "citty": "^0.2.2"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.4.12",
+    "@biomejs/biome": "^2.4.13",
     "@gas-plugin/unplugin": "workspace:*",
     "@rollup/plugin-typescript": "^12.3.0",
     "@types/google-apps-script": "^2.0.8",
     "@types/node": "^25.6.0",
-    "@vitest/coverage-v8": "^4.1.4",
+    "@vitest/coverage-v8": "^4.1.5",
     "esbuild": "^0.28.0",
-    "rollup": "^4.60.1",
+    "rollup": "^4.60.2",
     "ts-loader": "^9.5.7",
     "tslib": "^2.8.1",
     "typescript": "^6.0.3",
-    "vite": "^8.0.8",
+    "vite": "^8.0.10",
     "vite-plugin-dts": "^4.5.4",
-    "vitest": "^4.1.4",
+    "vitest": "^4.1.5",
     "webpack": "^5.106.2",
     "webpack-cli": "^7.0.2"
   }
